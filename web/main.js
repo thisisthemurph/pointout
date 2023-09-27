@@ -1,25 +1,22 @@
 QUESTION_LIST_KEY = "questions"
 CURRENT_QUESTION_INDEX_KEY = "current_question_index";
+MAX_QUESTIONS = 10;
 
-const testData = [
-    "Who is he most likely person to forget where they parked their car?",
-    "Who is the most likely person to sing in the shower?",
-];
+async function handleClick() {
+    const index = getQuestionIndex();
 
-localStorage.setItem(CURRENT_QUESTION_INDEX_KEY, "0");
-localStorage.setItem(QUESTION_LIST_KEY, JSON.stringify(testData));
+    if (index % MAX_QUESTIONS === 0) {
+        const nextQuestions = await fetchQuestions(index, MAX_QUESTIONS);
+        setQuestionList(nextQuestions);
+    }
+
+    const question = getQuestion(index % MAX_QUESTIONS);
+    displayQuestion(question);
+    setQuestionIndex(index + 1);
+}
 
 const btn = document.getElementById("question-button");
-btn.addEventListener("click", () => {
-    const index = getQuestionIndex();
-    const question = getQuestion(index);
-    showQuestion(question);
-    setQuestionIndex(index + 1);
-});
-
-function getQuestionIndex() {
-    return +localStorage.getItem(CURRENT_QUESTION_INDEX_KEY);
-}
+btn.addEventListener("click", handleClick);
 
 /**
  * Sets the current question index in local storage
@@ -27,6 +24,27 @@ function getQuestionIndex() {
  */
 function setQuestionIndex(newIndex) {
     localStorage.setItem(CURRENT_QUESTION_INDEX_KEY, `${newIndex}`);
+}
+
+/**
+ * Persists the questions in local storage
+ * @param { string[] } questionList The array of questions to be persisted
+ */
+function setQuestionList(questionList) {
+    localStorage.setItem(QUESTION_LIST_KEY, JSON.stringify(questionList));
+}
+
+/**
+ * Returns the current question index from local storage
+ * @returns { number } The current index
+ */
+function getQuestionIndex() {
+    const value = localStorage.getItem(CURRENT_QUESTION_INDEX_KEY);
+    if (value === null) {
+        return 0;
+    }
+
+    return +value;
 }
 
 /**
@@ -43,10 +61,21 @@ function getQuestion(index) {
 }
 
 /**
- * Presents the question on the screen
+ * Displays the question to the user
  * @param { string } question The question to be presented
  */
-function showQuestion(question) {
+function displayQuestion(question) {
     const elem = document.getElementById("question-text");
     elem.innerText = question;
+}
+
+/**
+ * Fetches a subset of the available questions
+ * @param { number } offset
+ * @param { number } count
+ * @returns { Promise<string[]> }
+ */
+async function fetchQuestions(offset, count) {
+    const response = await fetch(`http://0.0.0.0:8000/questions?offset=${offset}&count=${count}`);
+    return await response.json();
 }

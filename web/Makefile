@@ -5,3 +5,6 @@ install-tw:
 
 tww:
 	./tailwindcss -i ./styles/tailwind.css -o ./styles/app.css --watch
+
+run:
+	python3 -m http.server 3000
