@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HTML 5 Boilerplate</title>
+    <title>Pointout</title>
     <link rel="stylesheet" href="styles/app.css">
   </head>
   <body>
     <div>
-        <button id="question-button" class="w-full h-[100vh] bg-slate-50 p-12 text-[3rem]">
-            <span id="question-text">Start your game</span>
+        <section id="splashscreen" class="w-full h-[100vh] flex justify-center items-center">
+            <button id="start-button" class="text-[20vw]">
+              <span class="inline-block animate-splash1 text-red-500">Point</span><span class="inline-block animate-splash2">out</span>
+            </button>
+        </section>
+        <button id="question-button" class="hidden w-full h-[100vh] bg-slate-50 p-12">
+            <span id="question-text" class="block text-[5vw]"></span>
         </button>
     </div>
 	<script src="main.js"></script>

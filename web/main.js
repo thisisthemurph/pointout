@@ -2,7 +2,13 @@ QUESTION_LIST_KEY = "questions"
 CURRENT_QUESTION_INDEX_KEY = "current_question_index";
 MAX_QUESTIONS = 10;
 
-async function handleClick() {
+const startBtn = document.getElementById("start-button");
+const nextQuestionBtn = document.getElementById("question-button");
+
+startBtn.addEventListener("click", () => { removeSplashscreen(); handleGetNextQuestion(); });
+nextQuestionBtn.addEventListener("click", handleGetNextQuestion);
+
+async function handleGetNextQuestion() {
     const index = getQuestionIndex();
 
     if (index % MAX_QUESTIONS === 0) {
@@ -15,8 +21,12 @@ async function handleClick() {
     setQuestionIndex(index + 1);
 }
 
-const btn = document.getElementById("question-button");
-btn.addEventListener("click", handleClick);
+async function removeSplashscreen() {
+    // Hide the splash screen and present the question button
+    const splash = document.getElementById("splashscreen");
+    nextQuestionBtn.classList.remove("hidden");
+    splash.classList.add("hidden");
+}
 
 /**
  * Sets the current question index in local storage
