@@ -1,1 +1,5 @@
+.fleet
+.venv
+__pycache__
+
 tailwindcss
