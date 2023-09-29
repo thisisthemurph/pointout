@@ -9,11 +9,19 @@ startBtn.addEventListener("click", () => { removeSplashscreen(); handleGetNextQu
 nextQuestionBtn.addEventListener("click", handleGetNextQuestion);
 
 async function handleGetNextQuestion() {
-    const index = getQuestionIndex();
+    let index = getQuestionIndex();
 
     if (index % MAX_QUESTIONS === 0) {
-        const nextQuestions = await fetchQuestions(index, MAX_QUESTIONS);
-        setQuestionList(nextQuestions);
+        const response = await fetchQuestions(index, MAX_QUESTIONS);
+
+        // If there are no questions left, start again
+        if (response.length === 0) {
+            setQuestionIndex(0);
+            handleGetNextQuestion();
+            return;
+        }
+
+        setQuestionList(response);
     }
 
     const question = getQuestion(index % MAX_QUESTIONS);
