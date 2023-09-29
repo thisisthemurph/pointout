@@ -4,9 +4,23 @@ MAX_QUESTIONS = 10;
 
 const startBtn = document.getElementById("start-button");
 const nextQuestionBtn = document.getElementById("question-button");
+const helpButton = document.getElementById("help-button");
+const helpDialog = document.getElementById("help-dialog");
 
 startBtn.addEventListener("click", () => { removeSplashscreen(); handleGetNextQuestion(); });
 nextQuestionBtn.addEventListener("click", handleGetNextQuestion);
+helpButton.addEventListener("click", handleHelpButtonClick);
+helpDialog.addEventListener("click", handleCloseHelpDialog);
+
+function handleHelpButtonClick() {
+    /** @type HTMLDialogElement */
+    helpDialog.showModal();
+}
+
+function handleCloseHelpDialog() {
+    /** @type HTMLDialogElement */
+    helpDialog.close();
+}
 
 async function handleGetNextQuestion() {
     let index = getQuestionIndex();
