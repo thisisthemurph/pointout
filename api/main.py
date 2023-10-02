@@ -1,13 +1,17 @@
+import uuid
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from questions import questions
+from questions import get_questions
 
 app = FastAPI()
 
 origins = [
-    "http://0.0.0.0",
-    "http://0.0.0.0:3000",
+    "http://localhost",
+    "http://localhost:3000",
+    "http://127.0.0.1",
+    "http://127.0.0.1:3000",
 ]
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,6 +21,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/refresh")
+def refresh():
+    return dict(token=str(uuid.uuid4()))
+
+
 @app.get("/questions")
-def get_questions(offset: int = 0, count: int = 10):
-    return questions[offset:offset + count]
+def get_questions_list(offset: int = 0, count: int = 10, token: str = None):
+    return get_questions(token, offset, count)

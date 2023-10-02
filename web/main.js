@@ -102,12 +102,35 @@ function displayQuestion(question) {
 }
 
 /**
+ * @typedef { Object } TokenResponse
+ * @property { string } token
+ */
+
+/**
+ * Sets and returns a new token
+ * @returns { Promise<string> } token The newly set token
+ */
+async function setSessionToken() {
+    const response = await fetch("http://localhost:8000/refresh");
+    /** @type TokenResponse */
+    const data = await response.json();
+
+    localStorage.setItem("token", data.token);
+    return data.token;
+}
+
+/**
  * Fetches a subset of the available questions
  * @param { number } offset
  * @param { number } count
  * @returns { Promise<string[]> }
  */
 async function fetchQuestions(offset, count) {
-    const response = await fetch(`http://0.0.0.0:8000/questions?offset=${offset}&count=${count}`);
+    let token = localStorage.getItem("token");
+    if (!token) {
+        token = await setSessionToken();
+    }
+
+    const response = await fetch(`http://localhost:8000/questions?offset=${offset}&count=${count}&token=${token}`);
     return await response.json();
 }
