@@ -10,7 +10,7 @@ run:
 	python3 -m http.server 3000
 
 deploy-config:
-	echo "const BASE_URL = \"http://localhost:8000\";" > config.js
+	echo "const BASE_URL = \"https://pointout-api.onrender.com\";" > config.js
 
 deploy:
 	make deploy-config
