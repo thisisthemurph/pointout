@@ -31,7 +31,7 @@ async function handleGetNextQuestion() {
         // If there are no questions left, start again
         if (response.length === 0) {
             setQuestionIndex(0);
-            handleGetNextQuestion();
+            await handleGetNextQuestion();
             return;
         }
 
@@ -111,7 +111,7 @@ function displayQuestion(question) {
  * @returns { Promise<string> } token The newly set token
  */
 async function setSessionToken() {
-    const response = await fetch("http://localhost:8000/refresh");
+    const response = await fetch(`${BASE_URL}/refresh`);
     /** @type TokenResponse */
     const data = await response.json();
 
@@ -131,6 +131,6 @@ async function fetchQuestions(offset, count) {
         token = await setSessionToken();
     }
 
-    const response = await fetch(`http://localhost:8000/questions?offset=${offset}&count=${count}&token=${token}`);
+    const response = await fetch(`${BASE_URL}/questions?offset=${offset}&count=${count}&token=${token}`);
     return await response.json();
 }

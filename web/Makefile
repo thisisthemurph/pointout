@@ -8,3 +8,9 @@ tww:
 
 run:
 	python3 -m http.server 3000
+
+deploy-config:
+	echo "const BASE_URL = \"http://localhost:8000\";" > config.js
+
+deploy:
+	make deploy-config
